@@ -102,7 +102,10 @@ class Handlers
                 
                 
         if (j.JSONObject["operations"][0]["types"].Count>0)
-            isOperationType ="types"               
+            isOperationType ="types"   
+        
+        if (j.JSONObject["operations"][0]["lists"].Count>0)
+            isOperationType ="lists" 
                 
             
         //  else 
@@ -465,9 +468,9 @@ class Handlers
         
         if (oBody.Contains("systemError")){            
             
-            	oSession["ui-color"] = "red";	
+            oSession["ui-color"] = "red";	
             
-          }
+        }
 
         
     }
