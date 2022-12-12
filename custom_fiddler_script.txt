@@ -12,13 +12,15 @@ class Handlers
     function CalcOperationColOperation(oS: Session){
         var sResult = String.Empty;
         
-        var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
         
-        var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
 
-        var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["BridgeOperationName"])  
-        sResult =  s.Replace("\"", "")   
+            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["BridgeOperationName"])  
+            sResult =  s.Replace("\"", "")   
         
+        }
         
         
         
@@ -27,21 +29,27 @@ class Handlers
         
     public static BindUIColumn("operation Tag", 200, 2)
     function CalcOperationColOperation2(oS: Session){
+        
+        
         var sResult = String.Empty;
         
-        var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
         
-        var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+            
+            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
+        
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
 
         
-        if (j.JSONObject["operations"][0]["tag"])
-            sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"]) 
+            if (j.JSONObject["operations"][0]["tag"])
+                sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"]) 
         
-        else if (j.JSONObject["operations"][0]["Tag"])                
-            sResult =  Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["Tag"])
+            else if (j.JSONObject["operations"][0]["Tag"])                
+                sResult =  Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["Tag"])
         
         
-        sResult =  sResult.Replace("\"", "") 
+            sResult =  sResult.Replace("\"", "")
+         }
         
         return sResult;
     }
@@ -50,182 +58,284 @@ class Handlers
     function CalcOperationColKindOfMeta(oS: Session){
         var sResult = String.Empty;
         
-        var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
         
-        var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);    
+            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
         
-        var tagMetaInfo = j.JSONObject["operations"][0]["tag"]
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);    
         
-        var tagMetaInfoVal= ""; 
+            var tagMetaInfo = j.JSONObject["operations"][0]["tag"]
+        
+            var tagMetaInfoVal= ""; 
         
                     
-        tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"]) 
+            tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"]) 
     
             
-        var isOperationType  = tagMetaInfoVal;
+            var isOperationType  = tagMetaInfoVal;
             
-        //   if (tagMetaInfoVal =="MetaInfo"){
+            //   if (tagMetaInfoVal =="MetaInfo"){
                 
-        if (j.JSONObject["operations"][0]["menu"] ==="1")
-            isOperationType ="getMenu"
+            if (j.JSONObject["operations"][0]["menu"] ==="1")
+                isOperationType ="getMenu"
                 
-        //var operationObj = j.JSONObject["operations"][0]
-        //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
+            //var operationObj = j.JSONObject["operations"][0]
+            //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
                 
-        if (j.JSONObject["operations"][0]["resources"].Count>0)
-            isOperationType ="resources"
+            if (j.JSONObject["operations"][0]["resources"].Count>0)
+                isOperationType ="resources"
                     
-        //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
+            //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
                     
                 
                 
-        if (j.JSONObject["operations"][0]["filters"].Count>0)
-            isOperationType ="filters"
+            if (j.JSONObject["operations"][0]["filters"].Count>0)
+                isOperationType ="filters"
                 
-        if (j.JSONObject["operations"][0]["domains"].Count>0)
-            isOperationType ="domains"
-                
-                
-        if (j.JSONObject["operations"][0]["reports"].Count>0)
-            isOperationType ="reports"
+            if (j.JSONObject["operations"][0]["domains"].Count>0)
+                isOperationType ="domains"
                 
                 
-        if (j.JSONObject["operations"][0]["guiItems"].Count>0)
-            isOperationType ="guiItems"
+            if (j.JSONObject["operations"][0]["reports"].Count>0)
+                isOperationType ="reports"
                 
                 
-        if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
-            isOperationType ="menuProfiles"
-                
-        if (j.JSONObject["operations"][0]["uiViews"].Count>0)
-            isOperationType ="uiViews"
+            if (j.JSONObject["operations"][0]["guiItems"].Count>0)
+                isOperationType ="guiItems"
                 
                 
-        if (j.JSONObject["operations"][0]["types"].Count>0)
-            isOperationType ="types"   
+            if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
+                isOperationType ="menuProfiles"
+                
+            if (j.JSONObject["operations"][0]["uiViews"].Count>0)
+                isOperationType ="uiViews"
+                
+                
+            if (j.JSONObject["operations"][0]["types"].Count>0)
+                isOperationType ="types"   
         
-        if (j.JSONObject["operations"][0]["lists"].Count>0)
-            isOperationType ="lists" 
+            if (j.JSONObject["operations"][0]["lists"].Count>0)
+                isOperationType ="lists" 
                 
             
-        //  else 
+            //  else 
                 
-        // isOperationType ="не определено"
+            // isOperationType ="не определено"
                                
                 
-        // }
+            // }
         
 
-        sResult =   isOperationType        
+            sResult =   isOperationType        
+        
+        }
+        return sResult;
+    }
+        
+        
+        
+            
+    public static BindUIColumn("operation status", 200, 4)
+    function CalcOperationColOperationError(oS: Session){
+        var sResult = String.Empty;
+        
+        
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+        
+            var oResponseBody = System.Text.Encoding.UTF8.GetString(oS.responseBodyBytes);
+            
+            if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"")  ){            
+                sResult="fail"
+                
+            } else{
+            
+                    
+                var j = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody); 
+            
+                if (j.JSONObject["operations"][0]["state"])
+                    sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["state"])        
+                       
+        
+                sResult =  sResult.Replace("\"", "")
+            }
+        
+            //var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
+            //var jResStatus = jResponse.JSONObject["operations"][0]["state"];
+        
+                        
+        
+            // var j = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"]);
+        
+        
+        
+        
+           // if (jResStatus !=null)
+            //{
+              //  sResult =  Fiddler.WebFormats.JSON.JsonEncode(jResStatus)
+            
+          //  }           
+        
+        }
+        
         
         
         return sResult;
     }
-        
-            
     // The following snippet demonstrates how to create a custom tab that shows simple text
         
         
             
     public BindUITab("Operation Info")
     static function OperationReport(arrSess: Session[]):String {
-        var oSB: System.Text.StringBuilder = new System.Text.StringBuilder();
+        
+        
+         var oSB: System.Text.StringBuilder = new System.Text.StringBuilder();
+        
+        /*
+        
+        
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){   
         
       
         
         
-        for (var i:int = 0; i<arrSess.Length; i++)
-        {
+            for (var i:int = 0; i<arrSess.Length; i++)
+            {
 
         
-            var oBody = System.Text.Encoding.UTF8.GetString(arrSess[i].requestBodyBytes);
+                var oBody = System.Text.Encoding.UTF8.GetString(arrSess[i].requestBodyBytes);
 
-            // Convert the text into a JSON object
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+                // Convert the text into a JSON object
+                var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
             
             
-            var tagMetaInfo = j.JSONObject["operations"][0]["tag"];
+                var tagMetaInfo = j.JSONObject["operations"][0]["tag"];
             
-            var isOperationType ="";
+                var isOperationType ="";
             
-            if (tagMetaInfo ==="MetaInfo"){
+                if (tagMetaInfo ==="MetaInfo"){
                 
-                if (j.JSONObject["operations"][0]["menu"] ==="1")
-                    isOperationType ="getMenu"
+                    if (j.JSONObject["operations"][0]["menu"] ==="1")
+                        isOperationType ="getMenu"
                 
-                //var operationObj = j.JSONObject["operations"][0]
-                //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
+                    //var operationObj = j.JSONObject["operations"][0]
+                    //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
                 
-                if (j.JSONObject["operations"][0]["resources"].Count>0)
-                    isOperationType ="resources"
+                    if (j.JSONObject["operations"][0]["resources"].Count>0)
+                        isOperationType ="resources"
                     
-                //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
+                    //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
                     
                 
                 
-                if (j.JSONObject["operations"][0]["filters"].Count>0)
-                    isOperationType ="filters"
+                    if (j.JSONObject["operations"][0]["filters"].Count>0)
+                        isOperationType ="filters"
                 
-                if (j.JSONObject["operations"][0]["domains"].Count>0)
-                    isOperationType ="domains"
-                
-                
-                if (j.JSONObject["operations"][0]["reports"].Count>0)
-                    isOperationType ="reports"
+                    if (j.JSONObject["operations"][0]["domains"].Count>0)
+                        isOperationType ="domains"
                 
                 
-                if (j.JSONObject["operations"][0]["guiItems"].Count>0)
-                    isOperationType ="guiItems"
+                    if (j.JSONObject["operations"][0]["reports"].Count>0)
+                        isOperationType ="reports"
                 
                 
-                if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
-                    isOperationType ="menuProfiles"
-                
-                if (j.JSONObject["operations"][0]["uiViews"].Count>0)
-                    isOperationType ="uiViews"
+                    if (j.JSONObject["operations"][0]["guiItems"].Count>0)
+                        isOperationType ="guiItems"
                 
                 
-                if (j.JSONObject["operations"][0]["types"].Count>0)
-                    isOperationType ="types"
+                    if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
+                        isOperationType ="menuProfiles"
+                
+                    if (j.JSONObject["operations"][0]["uiViews"].Count>0)
+                        isOperationType ="uiViews"
                 
                 
+                    if (j.JSONObject["operations"][0]["types"].Count>0)
+                        isOperationType ="types"
                 
                 
                 
+                    var sErrors =""
+        
+               
+                    // if (j.JSONObject["operations"][0]["errors"].count>0){
+                    //    sErrors =   j.JSONObject["operations"][0]["errors"][0]
+                    // }
+            
+               
+        
+               
+                    //if (sErrors)                
+                    //  sResult =  Fiddler.WebFormats.JSON.JsonEncode(sErrors["text"])
+        
+                
+                
+                
+                }
+            
+                //  MessageBox.Show(Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject));
+
+                //Change the ConsistId value
+
+                //oSB.AppendLine("SESSION ");
+
+            
+            
+            
+           
+                oSB.AppendFormat("isOperationType: {0}\n",  isOperationType);
+                oSB.AppendFormat("idSessionProvider: {0}\n",  j.JSONObject["idSessionProvider"]);
+                oSB.AppendFormat("BridgeOperationName: {0}\n",  j.JSONObject["operations"][0]["BridgeOperationName"]);
+            
+                oSB.AppendLine("----------------------------------------------------------- ");
+                oSB.AppendFormat("request JSON: {0}\n",  Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject));
+            
+            
+            
+            
+                oSB.AppendLine("----------------------------------------------------------- ");          
+            
+            
+                oSB.AppendFormat("\n\n\n\n","");
+            
+                var oResponseBody = System.Text.Encoding.UTF8.GetString(arrSess[i].responseBodyBytes);
+            
+                oSB.AppendFormat("oResponseBody : {0}\n",  oResponseBody );
+                oSB.AppendLine("----------------------------------------------------------- ");          
+            
+            
+                oSB.AppendFormat("\n\n\n\n","");
+
+                // Convert the text into a JSON object
+                var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
+                //var jResErrors = jResponse.JSONObject["operations"][0]["errors"];
+                // var firstErr = jResErrors.JSONObject[0]
+                        
+                oSB.AppendLine("----------------------------------------------------------- ");
+                oSB.AppendFormat("errors: {0}\n",  Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"][0]["text"]));
+                oSB.AppendLine("----------------------------------------------------------- ");
+            
+                // Convert back to a byte array
+                var modBytes = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"][0]["text"]);
+                        
+            
+                // Convert json to bytes, storing the bytes in request body
+                var cc =System.Text.Encoding.UTF8.GetBytes(modBytes);
+                oSB.AppendFormat("Response JSON: {0}\n", cc);
+            
+            
+                // Convert the request body into a string
+                var res = System.Text.Encoding.UTF8.GetString(cc);
+                //Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject)
+                oSB.AppendFormat("res JSON to str: {0}\n", res);
+            
+
             }
-            
-            //  MessageBox.Show(Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject));
-
-            //Change the ConsistId value
-
-            //oSB.AppendLine("SESSION ");
-            
-            
-            oSB.AppendFormat("isOperationType: {0}\n",  isOperationType);
-            oSB.AppendFormat("idSessionProvider: {0}\n",  j.JSONObject["idSessionProvider"]);
-            oSB.AppendFormat("BridgeOperationName: {0}\n",  j.JSONObject["operations"][0]["BridgeOperationName"]);
-            
-            oSB.AppendLine("----------------------------------------------------------- ");
-            oSB.AppendFormat("request JSON: {0}\n",  Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject));
-            
-            
-            
-            
-            oSB.AppendLine("----------------------------------------------------------- ");          
-            
-            
-            oSB.AppendFormat("\n\n\n\n","");
-            
-            var oResponseBody = System.Text.Encoding.UTF8.GetString(arrSess[i].responseBodyBytes);
-
-            // Convert the text into a JSON object
-            var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
-            
-            oSB.AppendFormat("Response JSON: {0}\n",  Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject));
-            
-
         }
-        return oSB.ToString();
+            */
+            
+            return oSB.ToString();
+        
     }
                     
                         
@@ -463,15 +573,46 @@ class Handlers
 		
         //if (oSession.uriContains("metadata")) {	oSession["ui-color"] = "red";	}
 		
+        if (oSession.fullUrl.Contains("operation")  || oSession.fullUrl.Contains("metadata")){   
 		
-        var oBody = System.Text.Encoding.UTF8.GetString(oSession.responseBodyBytes);
+            var oResponseBody = System.Text.Encoding.UTF8.GetString(oSession.responseBodyBytes);
         
-        if (oBody.Contains("systemError")){            
+            if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"") ){            
             
-            oSession["ui-color"] = "red";	
+                oSession["ui-color"] = "red";	
             
+            }
+            
+            
+            
+        
+        
+        
         }
+       // var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
+      
+     //   try
+       //   var jResStatus = jResponse.JSONObject["operations"][0]["state"];
+       // catch
+        
+        
+                               
+        
+        // var j = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"]);
+               
+        
+        
+/*        if (jResStatus !=null)
+        {
+            sResult =  Fiddler.WebFormats.JSON.JsonEncode(jResStatus)
 
+            if (sResult.Contains("fail")){            
+            
+                oSession["ui-color"] = "red";	
+            
+            }
+            
+*/
         
     }
 
