@@ -38,6 +38,20 @@ class Handlers
 
             var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["BridgeOperationName"])  
             sResult =  s.Replace("\"", "")   
+            
+            if (sResult==="GetAllListRows")
+            {
+                sResult = "Загрузка НД"
+            }
+            
+            
+            if (sResult==="GetInfos")
+            {
+                sResult = "Получаем метаданные"
+            }
+                
+            
+
         
         }
         
