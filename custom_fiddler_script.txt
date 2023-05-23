@@ -2,407 +2,404 @@ import System;
 import System.Windows.Forms;
 import Fiddler;
 
-
-
 class Handlers
 {
-  
-    
+
     public static BindUIColumn("idSessionProvider", 100, 5)
     function CalcOperationColIdSessionProvide(oS: Session){
         var sResult = String.Empty;
-        
+
         if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
             var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
-        
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
 
-            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["idSessionProvider"])  
-            sResult =  s.Replace("\"", "")   
-        
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+
+            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["idSessionProvider"])
+            sResult =  s.Replace("\"", "")
+
         }
-        
-        
-        
+
+
+
         return sResult;
     }
-        
-             
+
+
     public static BindUIColumn("SID", 100, 5)
     function CalcOperationColSID(oS: Session){
         var sResult = String.Empty;
-        
+
         if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
             var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
-        
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
 
-            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["SID"])  
-            sResult =  s.Replace("\"", "")   
-        
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+
+            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["SID"])
+            sResult =  s.Replace("\"", "")
+
         }
-        
-        
-        
+
+
+
         return sResult;
     }
-        
+
     public static BindUIColumn("operation", 100, 1)
     function CalcOperationColOperation(oS: Session){
         var sResult = String.Empty;
-        
+
         if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
             var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
-        
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
 
-            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["BridgeOperationName"])  
-            sResult =  s.Replace("\"", "")   
-            
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+
+            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["BridgeOperationName"])
+            sResult =  s.Replace("\"", "")
+
             if (sResult==="GetAllListRows")
             {
                 sResult = "Загрузка НД"
             }
-            
-            
+
+
             if (sResult==="GetInfos")
             {
                 sResult = "Получаем метаданные"
             }
-                
-            
 
-        
+
+
+
         }
-        
-        
-        
+
+
+
         return sResult;
     }
-        
-            
-        
+
+
+
     public static BindUIColumn("operation Tag", 200, 2)
     function CalcOperationColOperation2(oS: Session){
-        
-        
-        var sResult = String.Empty;
-        
-        
-        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
-            
-            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
-        
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);            			
 
-                
+
+        var sResult = String.Empty;
+
+
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+
+            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
+
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+
+
             if (j.JSONObject["operations"].Count>1){
                  sResult   ="Несколько операций"
             }
             else{
-        
+
                 if (j.JSONObject["operations"][0]["tag"])
-                    sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"]) 
-        
-                else if (j.JSONObject["operations"][0]["Tag"])                
+                    sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"])
+
+                else if (j.JSONObject["operations"][0]["Tag"])
                     sResult =  Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["Tag"])
             }
-        
-        
+
+
             sResult =  sResult.Replace("\"", "")
          }
-        
+
         return sResult;
     }
-     
+
     public static BindUIColumn("kind of meta", 100, 3)
     function CalcOperationColKindOfMeta(oS: Session){
         var sResult = String.Empty;
-        
+
         if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
-        
+
             var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
-        
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);    
-        
+
+            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+
             var tagMetaInfo = j.JSONObject["operations"][0]["tag"]
-        
-            var tagMetaInfoVal= ""; 
-        
-                    
-            tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"]) 
-    
-            
+
+            var tagMetaInfoVal= "";
+
+
+            tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"])
+
+
             var isOperationType  = tagMetaInfoVal;
-            
+
             //   if (tagMetaInfoVal =="MetaInfo"){
-                
+
             if (j.JSONObject["operations"][0]["menu"] ==="1")
                 isOperationType ="getMenu"
-                
+
             //var operationObj = j.JSONObject["operations"][0]
             //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
-                
+
             if (j.JSONObject["operations"][0]["resources"].Count>0)
                 isOperationType ="resources"
-                    
+
             //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
-                    
-                
-                
+
+
+
             if (j.JSONObject["operations"][0]["filters"].Count>0)
                 isOperationType ="filters"
-                
+
             if (j.JSONObject["operations"][0]["domains"].Count>0)
                 isOperationType ="domains"
-                
-                
+
+
             if (j.JSONObject["operations"][0]["reports"].Count>0)
                 isOperationType ="reports"
-                
-                
+
+
             if (j.JSONObject["operations"][0]["guiItems"].Count>0)
                 isOperationType ="guiItems"
-                
-                
+
+
             if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
                 isOperationType ="menuProfiles"
-                
+
             if (j.JSONObject["operations"][0]["uiViews"].Count>0)
                 isOperationType ="uiViews"
-                
-                
-            if (j.JSONObject["operations"][0]["types"].Count>0)
-                isOperationType ="types"   
-        
-            if (j.JSONObject["operations"][0]["lists"].Count>0)
-                isOperationType ="lists" 
-                
-            
-            //  else 
-                
-            // isOperationType ="не определено"
-                               
-                
-            // }
-        
 
-            sResult =   isOperationType        
-        
+
+            if (j.JSONObject["operations"][0]["types"].Count>0)
+                isOperationType ="types"
+
+            if (j.JSONObject["operations"][0]["lists"].Count>0)
+                isOperationType ="lists"
+
+
+            //  else
+
+            // isOperationType ="не определено"
+
+
+            // }
+
+
+            sResult =   isOperationType
+
         }
         return sResult;
     }
-        
-        
-        
-            
+
+
+
+
     public static BindUIColumn("operation status", 200, 4)
     function CalcOperationColOperationError(oS: Session){
         var sResult = String.Empty;
-        
-        
+
+
         if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
-        
+
             var oResponseBody = System.Text.Encoding.UTF8.GetString(oS.responseBodyBytes);
-            
-            //if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"")  ){            
+
+            //if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"")  ){
              //   sResult="fail"
-                
+
             //} else{
-            
-                    
-                var j = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody); 
-            
+
+
+                var j = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
+
             if (j.JSONObject["state"]){
-                sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["state"])        
-                       
-        
+                sResult =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["state"])
+
+
                 sResult =  sResult.Replace("\"", "")
             }
             //}
-        
+
             //var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
             //var jResStatus = jResponse.JSONObject["operations"][0]["state"];
-        
-                        
-        
+
+
+
             // var j = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"]);
-        
-        
-        
-        
+
+
+
+
            // if (jResStatus !=null)
             //{
               //  sResult =  Fiddler.WebFormats.JSON.JsonEncode(jResStatus)
-            
-          //  }           
-        
+
+          //  }
+
         }
-        
-        
-        
+
+
+
         return sResult;
     }
     // The following snippet demonstrates how to create a custom tab that shows simple text
-        
-        
-            
+
+
+
     public BindUITab("Operation Info")
     static function OperationReport(arrSess: Session[]):String {
-        
-        
+
+
          var oSB: System.Text.StringBuilder = new System.Text.StringBuilder();
-        
+
         /*
-        
-        
-        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){   
-        
-      
-        
-        
+
+
+        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+
+
+
+
             for (var i:int = 0; i<arrSess.Length; i++)
             {
 
-        
+
                 var oBody = System.Text.Encoding.UTF8.GetString(arrSess[i].requestBodyBytes);
 
                 // Convert the text into a JSON object
                 var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
-            
-            
+
+
                 var tagMetaInfo = j.JSONObject["operations"][0]["tag"];
-            
+
                 var isOperationType ="";
-            
+
                 if (tagMetaInfo ==="MetaInfo"){
-                
+
                     if (j.JSONObject["operations"][0]["menu"] ==="1")
                         isOperationType ="getMenu"
-                
+
                     //var operationObj = j.JSONObject["operations"][0]
                     //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
-                
+
                     if (j.JSONObject["operations"][0]["resources"].Count>0)
                         isOperationType ="resources"
-                    
+
                     //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
-                    
-                
-                
+
+
+
                     if (j.JSONObject["operations"][0]["filters"].Count>0)
                         isOperationType ="filters"
-                
+
                     if (j.JSONObject["operations"][0]["domains"].Count>0)
                         isOperationType ="domains"
-                
-                
+
+
                     if (j.JSONObject["operations"][0]["reports"].Count>0)
                         isOperationType ="reports"
-                
-                
+
+
                     if (j.JSONObject["operations"][0]["guiItems"].Count>0)
                         isOperationType ="guiItems"
-                
-                
+
+
                     if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
                         isOperationType ="menuProfiles"
-                
+
                     if (j.JSONObject["operations"][0]["uiViews"].Count>0)
                         isOperationType ="uiViews"
-                
-                
+
+
                     if (j.JSONObject["operations"][0]["types"].Count>0)
                         isOperationType ="types"
-                
-                
-                
+
+
+
                     var sErrors =""
-        
-               
+
+
                     // if (j.JSONObject["operations"][0]["errors"].count>0){
                     //    sErrors =   j.JSONObject["operations"][0]["errors"][0]
                     // }
-            
-               
-        
-               
-                    //if (sErrors)                
+
+
+
+
+                    //if (sErrors)
                     //  sResult =  Fiddler.WebFormats.JSON.JsonEncode(sErrors["text"])
-        
-                
-                
-                
+
+
+
+
                 }
-            
+
                 //  MessageBox.Show(Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject));
 
                 //Change the ConsistId value
 
                 //oSB.AppendLine("SESSION ");
 
-            
-            
-            
-           
+
+
+
+
                 oSB.AppendFormat("isOperationType: {0}\n",  isOperationType);
                 oSB.AppendFormat("idSessionProvider: {0}\n",  j.JSONObject["idSessionProvider"]);
                 oSB.AppendFormat("BridgeOperationName: {0}\n",  j.JSONObject["operations"][0]["BridgeOperationName"]);
-            
+
                 oSB.AppendLine("----------------------------------------------------------- ");
                 oSB.AppendFormat("request JSON: {0}\n",  Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject));
-            
-            
-            
-            
-                oSB.AppendLine("----------------------------------------------------------- ");          
-            
-            
+
+
+
+
+                oSB.AppendLine("----------------------------------------------------------- ");
+
+
                 oSB.AppendFormat("\n\n\n\n","");
-            
+
                 var oResponseBody = System.Text.Encoding.UTF8.GetString(arrSess[i].responseBodyBytes);
-            
+
                 oSB.AppendFormat("oResponseBody : {0}\n",  oResponseBody );
-                oSB.AppendLine("----------------------------------------------------------- ");          
-            
-            
+                oSB.AppendLine("----------------------------------------------------------- ");
+
+
                 oSB.AppendFormat("\n\n\n\n","");
 
                 // Convert the text into a JSON object
                 var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
                 //var jResErrors = jResponse.JSONObject["operations"][0]["errors"];
                 // var firstErr = jResErrors.JSONObject[0]
-                        
+
                 oSB.AppendLine("----------------------------------------------------------- ");
                 oSB.AppendFormat("errors: {0}\n",  Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"][0]["text"]));
                 oSB.AppendLine("----------------------------------------------------------- ");
-            
+
                 // Convert back to a byte array
                 var modBytes = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"][0]["text"]);
-                        
-            
+
+
                 // Convert json to bytes, storing the bytes in request body
                 var cc =System.Text.Encoding.UTF8.GetBytes(modBytes);
                 oSB.AppendFormat("Response JSON: {0}\n", cc);
-            
-            
+
+
                 // Convert the request body into a string
                 var res = System.Text.Encoding.UTF8.GetString(cc);
                 //Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject)
                 oSB.AppendFormat("res JSON to str: {0}\n", res);
-            
+
 
             }
         }
             */
-            
+
             return oSB.ToString();
-        
+
     }
-                    
-                        
-            
-   
+
+
+
+
     /*
        public BindUITab("Flags")
        static function FlagsReport(arrSess: Session[]):String {
@@ -422,7 +419,7 @@ class Handlers
 
     // You can create a custom menu like so:
     /*
-    QuickLinkMenu("&Links") 
+    QuickLinkMenu("&Links")
     QuickLinkItem("IE GeoLoc TestDrive", "http://ie.microsoft.com/testdrive/HTML5/Geolocation/Default.html")
     QuickLinkItem("FiddlerCore", "http://fiddler2.com/fiddlercore")
     public static function DoLinksMenu(sText: String, sAction: String)
@@ -446,7 +443,7 @@ class Handlers
 
     // Cause Fiddler Classic to override the User-Agent header with one of the defined values
     // The page http://browserscope2.org/browse?category=selectors&ua=Mobile%20Safari is a good place to find updated versions of these
-    RulesString("&User-Agents", true) 
+    RulesString("&User-Agents", true)
     BindPref("fiddlerscript.ephemeral.UserAgentString")
     RulesStringValue(0,"Netscape &3", "Mozilla/3.0 (Win95; I)")
     RulesStringValue(1,"WinPhone8.1", "Mozilla/5.0 (Mobile; Windows Phone 8.1; Android 4.0; ARM; Trident/7.0; Touch; rv:11.0; IEMobile/11.0; NOKIA; Lumia 520) like iPhone OS 7_0_3 Mac OS X AppleWebKit/537 (KHTML, like Gecko) Mobile Safari/537")
@@ -486,11 +483,11 @@ class Handlers
 
     public static RulesOption("Cache Always &Fresh", "Per&formance")
     var m_AlwaysFresh: boolean = false;
-        
+
     // Force a manual reload of the script file.  Resets all
     // RulesOption variables to their defaults.
     public static ToolsAction("Reset Script")
-    function DoManualReload() { 
+    function DoManualReload() {
         FiddlerObject.ReloadScript();
     }
 
@@ -503,10 +500,10 @@ class Handlers
         UI.actUpdateInspector(true,true);
     }
 
-        
-  
-        
-            
+
+
+
+
     static function OnBeforeRequest(oSession: Session) {
         // Sample Rule: Color ASPX requests in RED
         // if (oSession.uriContains(".aspx")) {	oSession["ui-color"] = "red";	}
@@ -520,10 +517,10 @@ class Handlers
         // }
 
         if ((null != gs_ReplaceToken) && (oSession.url.indexOf(gs_ReplaceToken)>-1)) {   // Case sensitive
-            oSession.url = oSession.url.Replace(gs_ReplaceToken, gs_ReplaceTokenWith); 
+            oSession.url = oSession.url.Replace(gs_ReplaceToken, gs_ReplaceTokenWith);
         }
         if ((null != gs_OverridenHost) && (oSession.host.toLowerCase() == gs_OverridenHost)) {
-            oSession["x-overridehost"] = gs_OverrideHostWith; 
+            oSession["x-overridehost"] = gs_OverrideHostWith;
         }
 
         if ((null!=bpRequestURI) && oSession.uriContains(bpRequestURI)) {
@@ -540,9 +537,9 @@ class Handlers
 
         if (m_SimulateModem) {
             // Delay sends by 300ms per KB uploaded.
-            oSession["request-trickle-delay"] = "300"; 
+            oSession["request-trickle-delay"] = "300";
             // Delay receives by 150ms per KB downloaded.
-            oSession["response-trickle-delay"] = "150"; 
+            oSession["response-trickle-delay"] = "150";
         }
 
         if (m_DisableCaching) {
@@ -553,7 +550,7 @@ class Handlers
 
         // User-Agent Overrides
         if (null != sUA) {
-            oSession.oRequest["User-Agent"] = sUA; 
+            oSession.oRequest["User-Agent"] = sUA;
         }
 
         if (m_Japanese) {
@@ -561,11 +558,11 @@ class Handlers
         }
 
         if (m_AutoAuth) {
-            // Automatically respond to any authentication challenges using the 
+            // Automatically respond to any authentication challenges using the
             // current Fiddler Classic user's credentials. You can change (default)
             // to a domain\\username:password string if preferred.
             //
-            // WARNING: This setting poses a security risk if remote 
+            // WARNING: This setting poses a security risk if remote
             // connections are permitted!
             oSession["X-AutoAuth"] = "(default)";
         }
@@ -576,17 +573,17 @@ class Handlers
             oSession.responseCode = 304;
             oSession["ui-backcolor"] = "Lavender";
         }
-        
-        
-     
-        
+
+
+
+
     }
 
     // This function is called immediately after a set of request headers has
     // been read from the client. This is typically too early to do much useful
     // work, since the body hasn't yet been read, but sometimes it may be useful.
     //
-    // For instance, see 
+    // For instance, see
     // http://blogs.msdn.com/b/fiddler/archive/2011/11/05/http-expect-continue-delays-transmitting-post-bodies-by-up-to-350-milliseconds.aspx
     // for one useful thing you can do with this handler.
     //
@@ -599,14 +596,14 @@ class Handlers
     */
 
     //
-    // If a given session has response streaming enabled, then the OnBeforeResponse function 
+    // If a given session has response streaming enabled, then the OnBeforeResponse function
     // is actually called AFTER the response was returned to the client.
     //
-    // In contrast, this OnPeekAtResponseHeaders function is called before the response headers are 
-    // sent to the client (and before the body is read from the server).  Hence this is an opportune time 
-    // to disable streaming (oSession.bBufferResponse = true) if there is something in the response headers 
+    // In contrast, this OnPeekAtResponseHeaders function is called before the response headers are
+    // sent to the client (and before the body is read from the server).  Hence this is an opportune time
+    // to disable streaming (oSession.bBufferResponse = true) if there is something in the response headers
     // which suggests that tampering with the response body is necessary.
-    // 
+    //
     // Note: oSession.responseBodyBytes is not available within this function!
     //
     static function OnPeekAtResponseHeaders(oSession: Session) {
@@ -620,7 +617,7 @@ class Handlers
             oSession["x-breakresponse"]="status";
             oSession.bBufferResponse = true;
         }
-        
+
         if ((null!=bpResponseURI) && oSession.uriContains(bpResponseURI)) {
             oSession["x-breakresponse"]="uri";
             oSession.bBufferResponse = true;
@@ -632,63 +629,63 @@ class Handlers
         if (m_Hide304s && oSession.responseCode == 304) {
             oSession["ui-hide"] = "true";
         }
-		
+
         //if (oSession.uriContains("metadata")) {	oSession["ui-color"] = "red";	}
-		
-        if (oSession.fullUrl.Contains("operation")  || oSession.fullUrl.Contains("metadata")){   
-		
+
+        if (oSession.fullUrl.Contains("operation")  || oSession.fullUrl.Contains("metadata")){
+
             var oResponseBody = System.Text.Encoding.UTF8.GetString(oSession.responseBodyBytes);
-        
-            
-             
-            
-            //if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"")  ){            
+
+
+
+
+            //if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"")  ){
              //   sResult="fail"
-                
+
             //} else{
-            
-                    
-                var j = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody); 
-            
-            
-            
-            if   (oResponseBody.Contains("\"state\":\"fail\"") ){            
-            
-                oSession["ui-color"] = "red";	
-            
+
+
+                var j = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
+
+
+
+            if   (oResponseBody.Contains("\"state\":\"fail\"") ){
+
+                oSession["ui-color"] = "red";
+
             }
-            
-            
-            
-        
-        
-        
+
+
+
+
+
+
         }
        // var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
-      
+
      //   try
        //   var jResStatus = jResponse.JSONObject["operations"][0]["state"];
        // catch
-        
-        
-                               
-        
+
+
+
+
         // var j = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"]);
-               
-        
-        
+
+
+
 /*        if (jResStatus !=null)
         {
             sResult =  Fiddler.WebFormats.JSON.JsonEncode(jResStatus)
 
-            if (sResult.Contains("fail")){            
-            
-                oSession["ui-color"] = "red";	
-            
+            if (sResult.Contains("fail")){
+
+                oSession["ui-color"] = "red";
+
             }
-            
+
 */
-        
+
     }
 
 /*
@@ -753,10 +750,10 @@ class Handlers
         // UI.lvSessions.AddBoundColumn("Server", 50, "@response.server");
 
         // Uncomment to add a global hotkey (Win+G) that invokes the ExecAction method below...
-        // UI.RegisterCustomHotkey(HotkeyModifiers.Windows, Keys.G, "screenshot"); 
+        // UI.RegisterCustomHotkey(HotkeyModifiers.Windows, Keys.G, "screenshot");
     }
 
-    // These static variables are used for simple breakpointing & other QuickExec rules 
+    // These static variables are used for simple breakpointing & other QuickExec rules
     BindPref("fiddlerscript.ephemeral.bpRequestURI")
     public static var bpRequestURI:String = null;
 
@@ -799,13 +796,13 @@ class Handlers
                 return true;
             case "bpu":
                 if (sParams.Length<2) {bpRequestURI=null; FiddlerObject.StatusText="RequestURI breakpoint cleared"; return false;}
-                bpRequestURI = sParams[1]; 
+                bpRequestURI = sParams[1];
                 FiddlerObject.StatusText="RequestURI breakpoint for "+sParams[1];
                 return true;
             case "bpa":
             case "bpafter":
                 if (sParams.Length<2) {bpResponseURI=null; FiddlerObject.StatusText="ResponseURI breakpoint cleared"; return false;}
-                bpResponseURI = sParams[1]; 
+                bpResponseURI = sParams[1];
                 FiddlerObject.StatusText="ResponseURI breakpoint for "+sParams[1];
                 return true;
             case "overridehost":
@@ -857,7 +854,7 @@ class Handlers
                 return true;
             case "nuke":
                 UI.actClearWinINETCache();
-                UI.actClearWinINETCookies(); 
+                UI.actClearWinINETCookies();
                 return true;
             case "screenshot":
                 UI.actCaptureScreenshot(false);
