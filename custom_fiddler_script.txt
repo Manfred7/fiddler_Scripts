@@ -28,24 +28,34 @@ class Handlers
         }
 
 
-    public static BindUIColumn("SID", 100, 5)
-    function CalcOperationColSID(oS: Session){
-        var sResult = String.Empty;
+        public static BindUIColumn("SID", 100, 5)
+        function CalcOperationColSID(oS: Session){
+            var sResult = String.Empty;
 
-        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
-            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
+            if (oS){
+                if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
 
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+                    if (oS.requestBodyBytes){
+                        var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
 
-            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["SID"])
-            sResult =  s.Replace("\"", "")
+                        var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
 
+                        var s="";
+
+                        if (j.JSONObject["SID"]){
+                            s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["SID"])
+                        }
+                        sResult =  s.Replace("\"", "")
+                    }
+
+                }
+
+            }
+
+
+
+            return sResult;
         }
-
-
-
-        return sResult;
-    }
 
     public static BindUIColumn("operation", 100, 1)
     function CalcOperationColOperation(oS: Session){
