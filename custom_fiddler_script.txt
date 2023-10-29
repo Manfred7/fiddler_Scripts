@@ -126,82 +126,117 @@ class Handlers
     }
 
     public static BindUIColumn("kind of meta", 100, 3)
-    function CalcOperationColKindOfMeta(oS: Session){
-        var sResult = String.Empty;
+        function CalcOperationColKindOfMeta(oS: Session){
+            var sResult = String.Empty;
+            var isOperationType = String.Empty;
 
-        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+            if (oS){
 
-            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
-
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
-
-            var tagMetaInfo = j.JSONObject["operations"][0]["tag"]
-
-            var tagMetaInfoVal= "";
+                if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
 
 
-            tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["tag"])
+                    if (oS.requestBodyBytes){
+                        var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
 
-
-            var isOperationType  = tagMetaInfoVal;
-
-            //   if (tagMetaInfoVal =="MetaInfo"){
-
-            if (j.JSONObject["operations"][0]["menu"] ==="1")
-                isOperationType ="getMenu"
-
-            //var operationObj = j.JSONObject["operations"][0]
-            //oSB.AppendFormat("resources: {0}\n",  j.JSONObject["operations"][0]["resources"].Count );
-
-            if (j.JSONObject["operations"][0]["resources"].Count>0)
-                isOperationType ="resources"
-
-            //oSB.AppendFormat("resources if: {0}\n",  j.JSONObject["operations"][0]["resources"]);
+                        var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
 
 
 
-            if (j.JSONObject["operations"][0]["filters"].Count>0)
-                isOperationType ="filters"
+                        if (j.JSONObject["operations"][0]["Tag"]){
 
-            if (j.JSONObject["operations"][0]["domains"].Count>0)
-                isOperationType ="domains"
+                            var tagMetaInfo = j.JSONObject["operations"][0]["Tag"]
 
-
-            if (j.JSONObject["operations"][0]["reports"].Count>0)
-                isOperationType ="reports"
+                            var tagMetaInfoVal= "";
 
 
-            if (j.JSONObject["operations"][0]["guiItems"].Count>0)
-                isOperationType ="guiItems"
+                            tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(tagMetaInfo) ;
+                            isOperationType  = tagMetaInfoVal.Replace("\"", "")   ;
 
 
-            if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
-                isOperationType ="menuProfiles"
 
-            if (j.JSONObject["operations"][0]["uiViews"].Count>0)
-                isOperationType ="uiViews"
+                        }
 
+                        if (j.JSONObject["operations"][0]["tag"]){
 
-            if (j.JSONObject["operations"][0]["types"].Count>0)
-                isOperationType ="types"
+                            var tagMetaInfo = j.JSONObject["operations"][0]["tag"]
 
-            if (j.JSONObject["operations"][0]["lists"].Count>0)
-                isOperationType ="lists"
+                            var tagMetaInfoVal= "";
 
 
-            //  else
+                            tagMetaInfoVal = Fiddler.WebFormats.JSON.JsonEncode(tagMetaInfo) ;
+                            isOperationType  = tagMetaInfoVal.Replace("\"", "")   ;
 
-            // isOperationType ="не определено"
-
-
-            // }
+                        }
 
 
-            sResult =   isOperationType
+
+                        if (j.JSONObject["operations"][0]["menu"]){
+                            if (j.JSONObject["operations"][0]["menu"] ==="1")
+                                isOperationType ="getMenu"
+
+                        }
+
+
+                        if (j.JSONObject["operations"][0]["resources"]){
+                            if (j.JSONObject["operations"][0]["resources"].Count>0)
+                                isOperationType ="resources"
+                        }
+
+
+                        if (j.JSONObject["operations"][0]["filters"]){
+                            if (j.JSONObject["operations"][0]["filters"].Count>0)
+                                isOperationType ="filters"
+                        }
+
+                        if (j.JSONObject["operations"][0]["domains"]){
+                            if (j.JSONObject["operations"][0]["domains"].Count>0)
+                                isOperationType ="domains"
+
+                        }
+                        if (j.JSONObject["operations"][0]["reports"]){
+                            if (j.JSONObject["operations"][0]["reports"].Count>0)
+                                isOperationType ="reports"
+                        }
+
+
+                        if (j.JSONObject["operations"][0]["guiItems"]){
+
+                            if (j.JSONObject["operations"][0]["guiItems"].Count>0)
+                                isOperationType ="guiItems"
+                        }
+
+
+                        if (j.JSONObject["operations"][0]["menuProfiles"]){
+                            if (j.JSONObject["operations"][0]["menuProfiles"].Count>0)
+                                isOperationType ="menuProfiles"
+                        }
+
+                        if (j.JSONObject["operations"][0]["uiViews"]){
+                            if (j.JSONObject["operations"][0]["uiViews"].Count>0)
+                                isOperationType ="uiViews"
+                        }
+
+                        if (j.JSONObject["operations"][0]["types"]){
+                            if (j.JSONObject["operations"][0]["types"].Count>0)
+                                isOperationType ="types"
+                        }
+
+                        if (j.JSONObject["operations"][0]["lists"]){
+                            if (j.JSONObject["operations"][0]["lists"].Count>0)
+                                isOperationType ="lists"
+                        }
+
+
+                        sResult =   isOperationType
+
+                    }//oS.requestBodyBytes
+                }//metada/operation
+
+            }//os
+            return sResult;
+
 
         }
-        return sResult;
-    }
 
 
 
