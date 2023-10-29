@@ -57,30 +57,39 @@ class Handlers
             return sResult;
         }
 
-    public static BindUIColumn("operation", 100, 1)
+public static BindUIColumn("operation", 100, 1)
     function CalcOperationColOperation(oS: Session){
         var sResult = String.Empty;
 
         if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
-            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
 
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+            if (oS.requestBodyBytes){
 
-            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["operations"][0]["BridgeOperationName"])
-            sResult =  s.Replace("\"", "")
+                var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
 
-            if (sResult==="GetAllListRows")
-            {
-                sResult = "Загрузка НД"
+                var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+
+                var s = ""
+
+                var bridgeOperationNameInfo = j.JSONObject["operations"][0]["BridgeOperationName"];
+
+                if (bridgeOperationNameInfo){
+                    s =  Fiddler.WebFormats.JSON.JsonEncode(bridgeOperationNameInfo)
+                    sResult =  s.Replace("\"", "")
+
+                    if (sResult==="GetAllListRows")
+                    {
+                        sResult = "Загрузка НД"
+                    }
+
+
+                    if (sResult==="GetInfos")
+                    {
+                        sResult = "Получаем метаданные"
+                    }
+                }
+
             }
-
-
-            if (sResult==="GetInfos")
-            {
-                sResult = "Получаем метаданные"
-            }
-
-
 
 
         }
