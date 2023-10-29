@@ -8,23 +8,24 @@ class Handlers
 {
 
     public static BindUIColumn("idSessionProvider", 100, 5)
-    function CalcOperationColIdSessionProvide(oS: Session){
-        var sResult = String.Empty;
+        function CalcOperationColIdSessionProvide(oS: Session){
+            var sResult = String.Empty;
 
-        if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
-            var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
+            if (oS.requestBodyBytes){
+                if (oS.fullUrl.Contains("operation")  || oS.fullUrl.Contains("metadata")){
+                    var oBody = System.Text.Encoding.UTF8.GetString(oS.requestBodyBytes);
 
-            var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
+                    var j = Fiddler.WebFormats.JSON.JsonDecode(oBody);
 
-            var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["idSessionProvider"])
-            sResult =  s.Replace("\"", "")
+                    var s =   Fiddler.WebFormats.JSON.JsonEncode(j.JSONObject["idSessionProvider"])
+                    sResult =  s.Replace("\"", "")
 
+                }
+            }
+
+
+            return sResult;
         }
-
-
-
-        return sResult;
-    }
 
 
     public static BindUIColumn("SID", 100, 5)
