@@ -476,69 +476,33 @@ public static BindUIColumn("operation", 100, 1)
 
     }
 
-    static function OnBeforeResponse(oSession: Session) {
-        if (m_Hide304s && oSession.responseCode == 304) {
-            oSession["ui-hide"] = "true";
-        }
-
-        //if (oSession.uriContains("metadata")) {	oSession["ui-color"] = "red";	}
-
-        if (oSession.fullUrl.Contains("operation")  || oSession.fullUrl.Contains("metadata")){
-
-            var oResponseBody = System.Text.Encoding.UTF8.GetString(oSession.responseBodyBytes);
+       static function OnBeforeResponse(oSession: Session) {
+            if (m_Hide304s && oSession.responseCode == 304) {
+                oSession["ui-hide"] = "true";
+            }
 
 
+            if (oSession.fullUrl.Contains("operation")  || oSession.fullUrl.Contains("metadata")){
 
 
-            //if (oResponseBody.Contains("systemError") ||  oResponseBody.Contains("\"state\":\"fail\"")  ){
-             //   sResult="fail"
-
-            //} else{
+                if (oSession.responseBodyBytes){
+                    var oResponseBody = System.Text.Encoding.UTF8.GetString(oSession.responseBodyBytes);
 
 
-                var j = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
+                    if   (oResponseBody.Contains("\"state\":\"fail\"") ){
+
+                        oSession["ui-color"] = "red";
+
+                    }
+
+                }
 
 
-
-            if   (oResponseBody.Contains("\"state\":\"fail\"") ){
-
-                oSession["ui-color"] = "red";
 
             }
 
 
-
-
-
-
         }
-       // var jResponse = Fiddler.WebFormats.JSON.JsonDecode(oResponseBody);
-
-     //   try
-       //   var jResStatus = jResponse.JSONObject["operations"][0]["state"];
-       // catch
-
-
-
-
-        // var j = Fiddler.WebFormats.JSON.JsonEncode(jResponse.JSONObject["operations"][0]["errors"]);
-
-
-
-/*        if (jResStatus !=null)
-        {
-            sResult =  Fiddler.WebFormats.JSON.JsonEncode(jResStatus)
-
-            if (sResult.Contains("fail")){
-
-                oSession["ui-color"] = "red";
-
-            }
-
-*/
-
-    }
-
 /*
     // This function executes just before Fiddler Classic returns an error that it has
     // itself generated (e.g. "DNS Lookup failure") to the client application.
